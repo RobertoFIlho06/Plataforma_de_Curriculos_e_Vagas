@@ -1,0 +1,317 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================
+   JOBTRIVA MODERN — IDENTIDADE VISUAL
+   ========================================= */
+
+:root {
+  --background: #f8faf8;
+  --surface: #ffffff;
+  --foreground: #1c2924;
+  --muted: #66766e;
+  --border: #e4ebe5;
+
+  --primary: #168466;
+  --primary-hover: #106c52;
+  --primary-soft: #e9f6ef;
+
+  --sidebar-background: #0d3b2e;
+  --sidebar-surface: #164c3b;
+  --sidebar-active: #1c5a46;
+  --accent: #22d68f;
+}
+
+/* =========================================
+   ESTILOS GLOBAIS
+   ========================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #c9edda;
+  color: #14563f;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+select {
+  cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(22, 132, 102, 0.35);
+  outline-offset: 3px;
+}
+
+/* =========================================
+   COMPONENTES GLOBAIS
+   ========================================= */
+
+@layer components {
+  .card {
+    @apply rounded-2xl border bg-white p-6;
+    border-color: var(--border);
+    box-shadow: 0 4px 20px rgba(30, 65, 45, 0.035);
+    transition:
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 8px 28px rgba(30, 65, 45, 0.055);
+  }
+
+  .field-label {
+    @apply mb-2 block text-sm font-medium;
+    color: #40564a;
+  }
+
+  .field-input {
+    @apply w-full rounded-xl border bg-white px-4 py-3 text-sm outline-none transition;
+    border-color: #dce6de;
+    color: #253a2e;
+  }
+
+  .field-input::placeholder {
+    color: #98a79e;
+  }
+
+  .field-input:focus {
+    border-color: #20a17a;
+    box-shadow: 0 0 0 3px rgba(32, 161, 122, 0.12);
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-white transition;
+    background: var(--primary);
+    box-shadow: 0 3px 10px rgba(22, 132, 102, 0.12);
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 5px 15px rgba(22, 132, 102, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-white transition;
+    background: #dc4545;
+  }
+
+  .btn-danger:hover {
+    background: #bd3030;
+  }
+
+  .btn-ghost-danger {
+    @apply inline-flex items-center justify-center rounded-lg border px-3 py-2 text-xs font-medium transition;
+    border-color: #f4d5d5;
+    color: #bf4242;
+    background: #fff;
+  }
+
+  .btn-ghost-danger:hover {
+    background: #fff1f1;
+    border-color: #eebbbb;
+  }
+}
+
+/* =========================================
+   MENU LATERAL — JOBTRIVA MODERN
+   ========================================= */
+
+.jobtriva-sidebar {
+  background-color: var(--sidebar-background);
+  color: #ffffff;
+}
+
+.jobtriva-sidebar > div {
+  background-color: var(--sidebar-background);
+}
+
+/* Links do menu */
+
+.jobtriva-sidebar .jobtriva-nav-link {
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+}
+
+.jobtriva-sidebar .jobtriva-nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+}
+
+/* Página selecionada */
+
+.jobtriva-sidebar .jobtriva-nav-active,
+.jobtriva-sidebar .jobtriva-nav-active:hover {
+  background-color: var(--sidebar-active);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Cartão inferior */
+
+.jobtriva-sidebar .jobtriva-sidebar-card {
+  background-color: var(--sidebar-surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Barra de rolagem discreta */
+
+.jobtriva-sidebar {
+  scrollbar-width: none;
+}
+
+.jobtriva-sidebar::-webkit-scrollbar,
+.jobtriva-sidebar > div::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================================
+   BANNER PRINCIPAL — COMPACTO
+   ========================================= */
+
+/*
+  Aplica os ajustes somente ao banner da
+  página inicial, identificado pela sua
+  estrutura atual.
+*/
+
+@media (min-width: 1024px) {
+  section:has(> div > div > span > svg) {
+    height: 240px !important;
+    min-height: 240px !important;
+  }
+
+  section:has(> div > div > span > svg) > div:last-child {
+    height: 100% !important;
+    min-height: 0 !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  /* Área da ilustração */
+
+  section:has(> div > div > span > svg)
+    > div:last-child
+    > div:last-child {
+    height: 200px !important;
+    max-height: 200px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Cartão ilustrativo */
+
+  section:has(> div > div > span > svg)
+    > div:last-child
+    > div:last-child
+    > div:last-child {
+    transform: rotate(-3deg) scale(0.58) !important;
+    transform-origin: center center !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Título */
+
+  section:has(> div > div > span > svg) h2 {
+    font-size: 23px !important;
+    line-height: 1.15 !important;
+  }
+
+  /* Descrição */
+
+  section:has(> div > div > span > svg) h2 + p {
+    margin-top: 8px !important;
+  }
+
+  /* Botões */
+
+  section:has(> div > div > span > svg) h2 + p + div {
+    margin-top: 10px !important;
+  }
+}
+
+/* =========================================
+   ACESSIBILIDADE
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+
+/* JOBTRIVA — CORRIGIR BOTÕES CORTADOS NO BANNER */
+
+@media (min-width: 1024px) {
+  section:has(> div > div > span > svg) {
+    height: 260px !important;
+    min-height: 260px !important;
+  }
+
+  section:has(> div > div > span > svg) > div:last-child {
+    padding-top: 10px !important;
+    padding-bottom: 16px !important;
+  }
+
+  section:has(> div > div > span > svg) h2 + p + div {
+    margin-top: 10px !important;
+    margin-bottom: 4px !important;
+  }
+}
+
+/* Exportação A4: somente a folha profissional é impressa. */
+@page { size: A4; margin: 18mm; }
+@media print {
+  html, body { background: white !important; }
+  body:has(.jobtriva-print-page) aside.jobtriva-sidebar { display: none !important; }
+  body:has(.jobtriva-print-page) main.min-w-0 > div { max-width: none !important; padding: 0 !important; }
+  .jobtriva-print-page { padding: 0 !important; min-height: 0 !important; }
+  .resume-print-toolbar { display: none !important; }
+  .resume-print-document { box-shadow: none !important; padding: 0 !important; margin: 0 !important; width: auto !important; min-height: 0 !important; }
+  .resume-print-section { break-inside: avoid; }
+}

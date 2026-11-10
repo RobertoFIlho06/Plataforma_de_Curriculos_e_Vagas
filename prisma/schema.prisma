@@ -1,0 +1,143 @@
+// Banco de dados do JobTriva (SQLite, arquivo local em prisma/dev.db)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Perfil profissional. Uso pessoal: existe um único usuário.
+model User {
+  id               String   @id @default(cuid())
+  fullName         String   @default("")
+  email            String   @default("")
+  authEmail        String?  @unique
+  passwordHash     String?
+  phone            String   @default("")
+  linkedin         String   @default("")
+  city             String   @default("")
+  state            String   @default("")
+  education        String   @default("")
+  experience       String   @default("")
+  courses          String   @default("")
+  technicalSkills  String   @default("")
+  softSkills       String   @default("")
+  interestAreas    String   @default("")
+  workMode         String   @default("")
+  salaryExpectation String  @default("")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  authAccounts AuthAccount[]
+  resumes Resume[]
+  jobs Job[]
+  analyses Analysis[]
+  applications Application[]
+
+  avatarId  String  @default("avatar-1")
+  avatarUrl String?
+
+  
+}
+
+// Configurações do app (ex.: qual modelo de IA usar)
+model Setting {
+  key   String @id
+  value String
+}
+
+// Currículo original enviado em PDF
+model Resume {
+  id               String   @id @default(cuid())
+  userId           String
+  originalFileName String
+  storedFileName   String
+  extractedText    String   @default("")
+  // Rascunho do perfil sugerido pela IA (JSON), guardado até você revisar e aplicar
+  aiDraft          String   @default("")
+  createdAt        DateTime @default(now())
+
+  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  versions ResumeVersion[]
+}
+
+// Versões personalizadas do currículo (usadas a partir da Etapa 5)
+model ResumeVersion {
+  id        String   @id @default(cuid())
+  resumeId  String
+  jobId     String?
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+
+  resume       Resume        @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  job          Job?          @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  applications Application[]
+}
+
+// Vagas (cadastradas a partir da Etapa 4)
+model Job {
+  userId       String?
+  user         User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String   @id @default(cuid())
+  title        String
+  company      String   @default("")
+  description  String   @default("")
+  requirements String   @default("")
+  location     String   @default("")
+  salary       String   @default("")
+  url          String   @default("")
+  source       String   @default("manual")
+  foundAt      DateTime @default(now())
+
+  analyses       Analysis[]
+  applications   Application[]
+  resumeVersions ResumeVersion[]
+}
+
+// Análise de compatibilidade feita pela IA
+model Analysis {
+  userId    String?
+  user      User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  jobId     String
+  score     Int
+  met       String   @default("")
+  unmet     String   @default("")
+  positives String   @default("")
+  attention String   @default("")
+  aiSummary String   @default("")
+  createdAt DateTime @default(now())
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+}
+
+// Candidaturas e seus status
+model Application {
+  userId          String?
+  user            User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              String    @id @default(cuid())
+  jobId           String
+  resumeVersionId String?
+  message         String    @default("")
+  status          String    @default("FOUND")
+  appliedAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  job           Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  resumeVersion ResumeVersion? @relation(fields: [resumeVersionId], references: [id], onDelete: SetNull)
+}
+
+// Identidades externas, sem substituir o perfil profissional.
+model AuthAccount {
+  id                String @id @default(cuid())
+  userId            String
+  provider          String
+  providerAccountId String
+  user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
